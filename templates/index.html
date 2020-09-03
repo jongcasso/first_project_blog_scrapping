@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta property="og:title" content="정팀장의 추천 맛집"/>
+        <meta property="og:description" content="맛집블로그의 포스팅과 추천 맛집을 확인할 수 있습니다."/>
+        <meta property="og:image" content="{{ url_for('static', filename='ogimage.png') }}"/>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+
+        <!-- JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+
+        <!-- 구글폰트 -->
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@700&display=swap"
+              rel="stylesheet">
+
+
+        <title>파워블로그와 다이닝코드 추천 맛집 찾기</title>
+
+        <style>
+            * {
+                font-family: 'Nanum Gothic Coding', monospace;
+                color: #555555;
+            }
+
+            .wrap {
+                width: 950px;
+                margin: auto;
+            }
+
+            .card-deck {
+                width: 800px;
+                margin: auto;
+                height: 100px;
+            }
+
+            .card-body {
+                height: 220px;
+            }
+
+            .information-header {
+                margin: 50px 0 50px 0;
+                text-align: center;
+            }
+
+            .search-button {
+                margin: 150px 100px 50px 100px;
+                width: 550px;
+            }
+
+            .blog-button {
+                margin: 150px 100px 40px 100px;
+            }
+
+            .card-body-size {
+                width: 900px;
+                margin: 0px 0px 0px 100px;
+            }
+
+            #blog-card-group {
+                margin: auto;
+            }
+
+            #search-card-group {
+                margin: auto;
+            }
+
+            /*.card-body {*/
+            /*    margin-bottom: 15px;*/
+
+        </style>
+
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="information-header">
+                <h1 class="display-4">정팀장의 맛집 정보🍻</h1>
+                <p class="lead">오늘 한끼는 성공해보자!</p>
+            </div>
+            <div class="card-deck text-center">
+                <div class="card matjip-list">
+                    <div class="card-body">
+                        <h2 class="card-title pricing-card-title"><small class="text-muted">맛집 검색하기</small></h2>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>어디갈지</li>
+                            <li>고민하지말고</li>
+                        </ul>
+                        <button onclick="searchOpenClose()" type="button" id="matjip-search"
+                                class="btn btn-lg btn-block btn-primary">검색창을 열자!
+                        </button>
+                    </div>
+                </div>
+                <div class="card blog-search">
+                    <div class="card-body">
+                        <h2 class="card-title pricing-card-title"><small class="text-muted">블로그 보기</small></h2>
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>검증된 파워블로거의</li>
+                            <li>포스팅을 보자</li>
+                        </ul>
+                        <button onclick="blogOpenClose()" type="button" class="btn btn-lg btn-block btn-primary"
+                                id="blog-search">포스팅을 보자!
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="totalButton">
+                <div class="search-button" id="matjipSearchBox">
+                    <div class="input-group mb-3" id="search-box">
+                        <input type="text" id="gu-name" class="form-control" aria-label="Default"
+                               aria-describedby="inputGroup-sizing-default" placeholder="'구'를 입력하세요!">
+                        <div class="input-group-prepend">
+                            <button onclick="find_my_best_place()" class="btn btn-primary"
+                                    type="submit">맛집 검색하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="blog-button" id="blogSearchBox">
+                    <button onclick="showBlogPost1()" type="button" class="btn btn-secondary">비밀이야</button>
+                    <button onclick="showBlogPost2()" type="button" class="btn btn-secondary">비터팬의 식도락</button>
+                    <button onclick="showBlogPost3()" type="button" class="btn btn-secondary">미누 부산맛집</button>
+                    <button onclick="showBlogPost4()" type="button" class="btn btn-secondary">행복끼니</button>
+                </div>
+            </div>
+            <div class="card-columns card-body-size" id="blog-card-group">
+                <!--                    <div class="card" id="blog-card-select">-->
+                <!--                        <div class="card-body">-->
+                <!--                            <a href="http://www.naver.com" class="card-title">[서면]소설담 꼬치구이 존맛탱</a>-->
+                <!--                            <p class="card-text">블로그 내용 3~4줄 정도</p>-->
+            </div>
+            <div class="card-columns card-body-size" id="search-card-group">
+                <!--                <div class="card" id="search-card-select matjip-box">-->
+                <!--                    <div class="card-body">-->
+                <!--                        <a href="https://map.naver.com/v5/search/서울 마포구 동교로 276" class="card-title"><h5>2.규자카야 모토-->
+                <!--                        </a></h5>-->
+                <!--                        이자카야, 심야식당-->
+                <!--                        <p class="card-text">생생정보통, 맛있는안주</p>-->
+                <!--                        연남동-->
+                <!--                        <p class="card-text">서울특별시 마포구 연남동 224-26 2층</p>-->
+                <!--                    </div>-->
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                $('#matjipSearchBox').hide();
+                $('#blogSearchBox').hide();
+                $('#blog-card-group').hide();
+                $('#search-card-group').hide();
+            });
+
+            function searchOpenClose() {
+                if ($('#matjipSearchBox').css('display') == 'block') {
+                    $('#matjipSearchBox').hide();
+                    $('#blog-card-group').hide();
+                    $('#search-card-group').hide();
+                    $('#matjip-search').text('검색창을 열자!');
+                } else {
+                    $('#matjipSearchBox').show();
+                    $('#matjip-search').text('검색창 닫기');
+                    $('#blog-card-group').hide();
+                    if ($('#blogSearchBox').show()) {
+                        $('#blogSearchBox').hide();
+                        $('#blog-search').text('블로그를 보자!')
+
+                    }
+                }
+            }
+
+            function blogOpenClose() {
+                if ($('#blogSearchBox').css('display') == 'block') {
+                    $('#blogSearchBox').hide();
+                    $('#blog-search').text('블로그를 보자!');
+                    $('#blog-card-group').hide();
+                    $('#blog-card-group').empty();
+                } else {
+                    $('#blogSearchBox').show();
+                    $('#blog-search').text('블로그 닫기');
+                    $('#blog-card-group').show();
+                    $('#search-card-group').hide();
+                    if ($('#matjipSearchBox').show()) {
+                        $('#matjipSearchBox').hide();
+                        $('#matjip-search').text('검색창을 열자!')
+                        $('#blog-card-group').empty();
+                    }
+                }
+            }
+
+            let seoulGu = ["종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구", "강북구", "도봉구", "노원구", "은평구", "서대문구", "마포구", "양천구", "강서구", "구로구", "금천구", "영등포구", "동작구", "관악구", "서초구", "강남구", "송파구", "강동구", "기흥구", "수지구", "처인구", "분당구", "수정구", "중원구"];
+
+            function isValidGuName(guName) {
+                for (let i = 0; i < seoulGu.length; i++) {
+                    if (guName == seoulGu[i]) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function find_my_best_place() {
+                let guName = $('#gu-name').val();
+                if (guName == '') {
+                    alert('구 이름을 입력하세요');
+                    return;
+                }
+                if (isValidGuName(guName) == false) {
+                    alert('올바른 구 이름을 입력하세요');
+                    return;
+                }
+                $.ajax({
+                    type: "GET",
+                    url: `/matjip?gu_give=${guName}`,
+                    data: {},
+                    success: function (response) {
+                        $('#search-card-group').empty();
+                        $('#search-card-group').show();
+                        // console.log(response)
+                        let matjipList = response["matjip_list"];
+                        for (let i = 0; i < 50; i++) {
+                            // console.log(matjipList[i])
+                            let matjip = matjipList[i];
+                            let Name = matjip["name"];
+                            let Tag = matjip["tag"];
+                            let Addr = matjip["addr"];
+                            let Type = matjip["type"];
+                            let Local = matjip["local"];
+                            let Gu = matjip["gu"];
+                            let temp_html = `<div class="card" id="search-card-select matjip-box">
+                    <div class="card-body">
+                    <a href="https://map.naver.com/v5/search/${Addr}" class="card-title"><h5>${Name}
+                    </a></h5>
+                    ${Type}
+                    <p class="card-text">${Tag}</p>
+                    ${Local}
+                    <p class="card-text">${Addr}</p>
+                    </div>
+                </div>`;
+
+                            $('#search-card-group').append(temp_html);
+                        }
+                    }
+                })
+            }
+
+            function showBlogPost1() {
+                $.ajax({
+                    type: "GET",
+                    url: "/blogpost1",
+                    data: {},
+                    success: function (response) {
+                        $('#blog-card-group').empty();
+                        // console.log(response)
+                        let articles = response["articles"];
+                        // console.log(articles)
+                        for (let i = 0; i < 36; i++) {
+                            makeCard1(articles[i]["url"], articles[i]["title"], articles[i]["desc"].substring(0, 60))
+                        }
+                    }
+                })
+            }
+
+            function makeCard1(url, title, desc) {
+                let temp_html1 = `<div class="card" id="blog-card-select">
+                        <div class="card-body">
+                        <a href="${url}" class="card-title">${title}</a>
+                        <p class="card-text">${desc}</p>
+                        </div>
+                        </div>`;
+
+                $('#blog-card-group').append(temp_html1);
+            }
+
+            function showBlogPost2() {
+                $.ajax({
+                    type: "GET",
+                    url: "/blogpost2",
+                    data: {},
+                    success: function (response) {
+                        $('#blog-card-group').empty();
+                        // console.log(response)
+                        let articles2 = response["articles"];
+                        // console.log(articles)
+                        for (let i = 0; i < 36; i++) {
+                            makeCard2(articles2[i]["url"], articles2[i]["title"], articles2[i]["desc"].substring(0, 60))
+                        }
+                    }
+                })
+            }
+
+            function makeCard2(url, title, desc) {
+                let temp_html2 = `<div class="card" id="blog-card-select">
+                        <div class="card-body">
+
+                            <a href="${url}" class="card-title">${title}</a>
+
+                        <p class="card-text">${desc}</p>
+                        </div>
+                        </div>`;
+
+                $('#blog-card-group').append(temp_html2);
+            }
+
+            function showBlogPost3() {
+                $.ajax({
+                    type: "GET",
+                    url: "/blogpost3",
+                    data: {},
+                    success: function (response) {
+                        $('#blog-card-group').empty();
+                        // console.log(response)
+                        let articles3 = response["articles"];
+                        // console.log(articles)
+                        for (let i = 0; i < 36; i++) {
+                            makeCard3(articles3[i]["url"], articles3[i]["title"], articles3[i]["desc"].substring(0, 60))
+                        }
+                    }
+                })
+            }
+
+            function makeCard3(url, title, desc) {
+                let temp_html3 = `<div class="card" id="blog-card-select">
+                        <div class="card-body">
+
+                            <a href="${url}" class="card-title">${title}</a>
+
+                        <p class="card-text">${desc}</p>
+                        </div>
+                        </div>`;
+
+                $('#blog-card-group').append(temp_html3);
+            }
+
+
+            function showBlogPost4() {
+                $.ajax({
+                    type: "GET",
+                    url: "/blogpost4",
+                    data: {},
+                    success: function (response) {
+                        $('#blog-card-group').empty();
+                        // console.log(response)
+                        let articles4 = response["articles"];
+                        // console.log(articles)
+                        for (let i = 0; i < 36; i++) {
+                            makeCard4(articles4[i]["url"], articles4[i]["title"], articles4[i]["desc"].substring(0, 60))
+                        }
+                    }
+                })
+            }
+
+            function makeCard4(url, title, desc) {
+                let temp_html4 = `<div class="card" id="blog-card-select">
+                        <div class="card-body">
+
+                            <a href="${url}" class="card-title">${title}</a>
+
+                        <p class="card-text">${desc}</p>
+                        </div>
+                        </div>`;
+
+                $('#blog-card-group').append(temp_html4);
+            }
+
+
+        </script>
+    </body>
+</html>
